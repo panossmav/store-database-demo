@@ -1,7 +1,10 @@
-CREATE TABLE IF NOT EXISTS users(
+CREATE TABLE IF NOT EXISTS customers (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name TEXT NOT NULL,
-    age INTEGER,
+    f_name TEXT NOT NULL,
+    l_name TEXT NOT NULL,
+    email TEXT UNIQUE,
+    phone INTEGER,
     dob DATE,
-    email TEXT UNIQUE
+    vat INTEGER,
+    business BOOLEAN
 );
