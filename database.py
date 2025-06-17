@@ -28,8 +28,9 @@ def delete_customer(phone,email):
         )
         conn.commit()
         conn.close()
+        return 1
     else:
-        print('Error')
+        return 0
 
 
 
