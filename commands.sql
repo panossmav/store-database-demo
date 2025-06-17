@@ -4,7 +4,5 @@ CREATE TABLE IF NOT EXISTS customers (
     l_name TEXT NOT NULL,
     email TEXT UNIQUE,
     phone INTEGER,
-    dob DATE,
     vat INTEGER,
-    business BOOLEAN
 );

@@ -10,11 +10,11 @@ cursor.executescript(sql_script)
 conn.commit()
 
 
-def add_customer(f_name,l_name,email,phone,dob,vat,business):
+def add_customer(f_name,l_name,email,phone,vat):
     conn = sql.connect('database.db')
     cursor = conn.cursor()
-    cursor.execute("INSERT INTO customers (f_name,l_name,email,phone,dob,vat,business) VALUES (? , ? , ?, ?, ?, ?, ?)",
-        (f_name,l_name,email,phone,dob,vat,business))
+    cursor.execute("INSERT INTO customers (f_name,l_name,email,phone,vat) VALUES (? , ? , ?, ?, ?)",
+        (f_name,l_name,email,phone,vat,))
     conn.commit()
     conn.close()
 
@@ -30,6 +30,10 @@ def delete_customer(phone,email):
         conn.close()
     else:
         print('Error')
+
+
+
+
 
 def getEmail(phone):
     conn = sql.connect('databse.db')
