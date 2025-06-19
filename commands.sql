@@ -4,5 +4,12 @@ CREATE TABLE IF NOT EXISTS customers (
     l_name TEXT NOT NULL,
     email TEXT UNIQUE,
     phone INTEGER,
-    vat INTEGER,
+    vat INTEGER
+);
+
+CREATE TABLE IF NOT EXISTS products (
+    sku INTEGER,
+    product_name TEXT NOT NULL,
+    price REAL,
+    PRIMARY KEY (sku)
 );

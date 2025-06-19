@@ -33,6 +33,18 @@ def delete_customer(phone,email):
         return 0
 
 
+def email_check(email):
+    conn = sql.connect('database.db')
+    cursor = conn.cursor()
+    cursor.execute(
+        "SELECT * FROM customers WHERE email = ?",(email,)
+    )
+    email_server = cursor.fetchone()
+    conn.close()
+    if email_server:
+        return True
+    else:
+        return False
 
 
 
@@ -47,5 +59,41 @@ def getEmail(phone):
         return row[0]
     else:
         return None
+    
+def search_product(sku):
+    conn = sql.connect('database.db')
+    cursor = conn.cursor()
+    cursor.execute(
+        "SELECT * FROM products WHERE sku=?", (sku,)
+    )
+    product = cursor.fetchone()
+    conn.close()
+    if product:
+        return product
+    else:
+        product = 'Product not found!'
+        return product
+    
+
+def create_product(sku,title,price):
+    conn = sql.connect('database.db')
+    cursor = conn.cursor()
+    cursor.execute(
+        "INSERT INTO products (sku,product_name,price) VALUES(?, ?, ?)",(sku,title,price)
+    )
+    conn.commit()
+    conn.close()
+
+def check_sku(sku):
+    conn = sql.connect('database.db')
+    cursor = conn.cursor()
+    cursor.execute(
+        "SELECT * FROM products WHERE sku = ?"(sku,)
+    )
+    product = cursor.fetchone()
+    if not product:
+        product = 0
+    
+
 conn.close()
     

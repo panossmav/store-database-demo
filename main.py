@@ -1,7 +1,11 @@
 from tkinter import *
 import tkinter
-from database import add_customer,delete_customer
+from database import add_customer,delete_customer,email_check,search_product
+import json
 app = tkinter.Tk()
+
+
+
 
 def clear_app():
     for widgets in app.winfo_children():
@@ -17,6 +21,23 @@ phone_e = Entry(app)
 vat_l = Label(app,text='Δώσε ΑΦΜ \n')
 vat_e = Entry(app)
 error_label = Label(app,text='Σφάλμα κατα την εισαγωγή \n')
+sku_l = Label(app,text='Δώσε τον κωδικό (SKU) Του προϊόντος \n')
+sku_e = Entry(app)
+
+def start_search_product():
+    clear_app()
+    sku_l.pack()
+    sku_e.pack()
+    def sbt_search():
+        sku = int(sku_e.get())
+        product_info = search_product(sku)
+        tk_variable = tkinter.StringVar()
+        tk_variable.set(product_info)
+        product_label = Label(app,textvariable=tk_variable)
+        product_label.pack()
+    sbt_search_btn = Button(app,text='Αναζήτηση',command=sbt_search)
+    sbt_search_btn.pack()
+
 
 def new_customer():
     clear_app()
@@ -37,12 +58,16 @@ def new_customer():
         email = email_e.get()
         phone = int(phone_e.get())
         vat = int(vat_e.get())
+        email_verify = email_check(email)
         if '@' not in email:
             error_label.pack()
+        elif email_verify == True:
+            email_in_use = Label(app,text='This email is already in use!')
+            email_in_use.pack()
         else:
             add_customer(f_name,l_name,email,phone,vat)
             added = Label(app,text='Ο πελάτης προστέθηκε επιτυχώς')
-    sbt_btn = Button(app,text='Προσθήκη',comand=sbt)
+    sbt_btn = Button(app,text='Προσθήκη',command=sbt)
     sbt_btn.pack()
 
 def rmv_customer():
@@ -71,11 +96,12 @@ app.minsize(500,500)
 intro_label = Label(app,text='Παρακαλώ επιλέξτε: \n')
 add_btn = Button(app,text='Προσθήκη Πελάτη',command=new_customer)
 delete_btn = Button(app,text='Διαγραφή Πελάτη',command=rmv_customer)
-
+search_product_btn = Button(app,text='Αναζήτηση προιόντος',command=start_search_product)
 
 intro_label.pack()
 add_btn.pack()
 delete_btn.pack()
+search_product_btn.pack()
 app.mainloop()
 
 
