@@ -122,7 +122,15 @@ def delete_product(sku):
     conn.commit()
     conn.close()
 
-
+def phone_check(phone):
+    conn = sql.connect('database.db')
+    cursor=conn.cursor()
+    cursor.execute(
+        "SELECT * FROM customers WHERE phone = ?",(phone,)
+    )
+    result=cursor.fetchone()
+    conn.close()
+    return result
 
 conn.close()
     
