@@ -43,13 +43,13 @@ def delete_customer(phone,email):
         conn = sql.connect('database.db')
         cursor = conn.cursor()
         cursor.execute(
-            "DELETE FROM customers WHERE phone = ?",(phone)
+            "DELETE FROM customers WHERE phone = ?",(phone,)
         )
         conn.commit()
         conn.close()
-        return 1
+        return True # Success 
     else:
-        return 0
+        return False #Not correct combo
 
 
 def email_check(email):
@@ -68,10 +68,10 @@ def email_check(email):
 
 
 def getEmail(phone):
-    conn = sql.connect('databse.db')
+    conn = sql.connect('database.db')
     cursor = conn.cursor()
     cursor.execute(
-        "SELECT email FROM customers WHERE phone = ?",(phone)
+        "SELECT email FROM customers WHERE phone = ?",(phone,)
     )
     row = cursor.fetchone()
     if row:
@@ -117,7 +117,7 @@ def delete_product(sku):
     conn = sql.connect('database.db')
     cursor = conn.cursor()
     cursor.execute(
-        "DELETE FROM customers WHERE sku = ?",(sku,)
+        "DELETE FROM products WHERE sku = ?",(sku,)
     )
     conn.commit()
     conn.close()
