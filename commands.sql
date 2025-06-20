@@ -13,3 +13,9 @@ CREATE TABLE IF NOT EXISTS products (
     price REAL,
     PRIMARY KEY (sku)
 );
+
+CREATE TABLE IF NOT EXISTS users (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    username TEXT NOT NULL UNIQUE,
+    passw TEXT NOT NULL
+);

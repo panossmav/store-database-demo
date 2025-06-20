@@ -1,4 +1,5 @@
 import sqlite3 as sql
+import hashlib
 
 conn = sql.connect('database.db')
 
@@ -8,6 +9,24 @@ with open('commands.sql','r') as f:
     sql_script = f.read()
 cursor.executescript(sql_script)
 conn.commit()
+
+def check_logins(user,password):
+    encrypted_pass=hashlib.sha256(password.encode()).hexdigest()
+    conn = sql.connect('database.db')
+    cursor=conn.cursor()
+    cursor.execute(
+        "SELECT * FROM users WHERE username=? AND passw=?",(user,encrypted_pass)
+    )
+    result = cursor.fetchone()
+
+    conn.close()
+    if result:
+        return True #Correct Credentials
+    else:
+        return False #Wrong Credentials
+    
+
+
 
 
 def add_customer(f_name,l_name,email,phone,vat):
@@ -93,6 +112,17 @@ def check_sku(sku):
     product = cursor.fetchone()
     conn.close()
     return product
+
+def delete_product(sku):
+    conn = sql.connect('database.db')
+    cursor = conn.cursor()
+    cursor.execute(
+        "DELETE FROM customers WHERE sku = ?",(sku,)
+    )
+    conn.commit()
+    conn.close()
+
+
 
 conn.close()
     
