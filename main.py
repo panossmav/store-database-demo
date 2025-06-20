@@ -1,6 +1,6 @@
 from tkinter import *
 import tkinter
-from database import add_customer,delete_customer,email_check,search_product
+from database import add_customer,delete_customer,email_check,search_product,create_product,check_sku
 import json
 app = tkinter.Tk()
 
@@ -37,6 +37,33 @@ def start_search_product():
         product_label.pack()
     sbt_search_btn = Button(app,text='Αναζήτηση',command=sbt_search)
     sbt_search_btn.pack()
+
+def new_product():
+    clear_app()
+    sku_l.pack()
+    sku_e.pack()
+    title_l = Label (app,text='Δώσε όνομα προϊόντος')
+    title_l.pack()
+    title_e = Entry (app)
+    title_e.pack()
+    price_l = Label (app,text='Δώσε τιμή προϊόντος')
+    price_l.pack()
+    price_e = Entry (app)
+    price_e.pack()
+    def submit_new():
+        sku = int(sku_e.get())
+        product_name = title_e.get()
+        price = float(price_e.get())
+        server_sku = check_sku(sku)
+        if not server_sku:
+            create_product(sku,product_name,price)
+            added_l = Label(app,text='Το προϊόν αποθηκεύτηκε επιτυχώς! \n')
+            added_l.pack()
+        else:
+            error_l = Label(app,text='Ο κωδικός υπάρχει ήδη! \n')
+            error_l.pack()
+    sbt_add_btn = Button(app,text='Προσθήκη',command=submit_new)
+    sbt_add_btn.pack()
 
 
 def new_customer():
@@ -97,11 +124,18 @@ intro_label = Label(app,text='Παρακαλώ επιλέξτε: \n')
 add_btn = Button(app,text='Προσθήκη Πελάτη',command=new_customer)
 delete_btn = Button(app,text='Διαγραφή Πελάτη',command=rmv_customer)
 search_product_btn = Button(app,text='Αναζήτηση προιόντος',command=start_search_product)
+new_product_btn = Button(app,text='Προσθήκη προϊόντος \n',command=new_product)
+
+
+
+
 
 intro_label.pack()
 add_btn.pack()
 delete_btn.pack()
 search_product_btn.pack()
+new_product_btn.pack()
+
 app.mainloop()
 
 

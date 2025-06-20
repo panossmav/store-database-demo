@@ -88,12 +88,11 @@ def check_sku(sku):
     conn = sql.connect('database.db')
     cursor = conn.cursor()
     cursor.execute(
-        "SELECT * FROM products WHERE sku = ?"(sku,)
+        "SELECT * FROM products WHERE sku = ?",(sku,)
     )
     product = cursor.fetchone()
-    if not product:
-        product = 0
-    
+    conn.close()
+    return product
 
 conn.close()
     
