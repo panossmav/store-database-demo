@@ -18,7 +18,7 @@ conn = sql.connect(resource_path('database.db'))
 
 cursor=conn.cursor()
 
-with open('commands.sql','r') as f:
+with open(resource_path("commands.sql"), "r") as f:
     sql_script = f.read()
 cursor.executescript(sql_script)
 conn.commit()
