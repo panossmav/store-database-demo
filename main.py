@@ -7,12 +7,12 @@ def clear_app():
 
 
 app = tk.Tk() #GUI APP START
-app.title('Συνδεθείτε')
+app.title('CRM Lite - Συνδεθείτε')
 app.minsize(600,400)
-tk.Label(app,text="Enter username \n").pack()
+tk.Label(app,text="Δώσε username \n").pack()
 user_e = Entry(app)
 user_e.pack()
-tk.Label(app,text="Enter password \n").pack()
+tk.Label(app,text="Δώσε password \n").pack()
 passw_e = Entry(app,show='*')
 passw_e.pack()
 
@@ -33,6 +33,7 @@ def login():
 
 def new_customer():
     clear_app()
+    app.title('CRM Lite - Δημιουργία Χρήστη')
     tk.Label(app,text='Προσθήκη πελάτη \n \n').pack()
     tk.Label(app,text='Όνομα πελάτη:').pack()
     f_name_e = Entry(app)
@@ -64,9 +65,11 @@ def new_customer():
                 add_customer(f_name,l_name,email,phone,vat)
                 tk.Label(app,text='Ο πελάτης αποθηκεύτηκε! ').pack()
     tk.Button(app,text='Προσθήκη',command=new_customer_sbt).pack()
+    tk.Button(app,text='Πίσω στην αρχική ->>',command=home).pack()
          
 def remove_customer():
     clear_app()
+    app.title('CRM Lite - Δημιουργία Χρήστη')
     tk.Label(app,text='Δώσε email').pack()
     email_e = Entry(app)
     email_e.pack()
@@ -82,9 +85,11 @@ def remove_customer():
         else:
             tk.Label(app,text='Σφάλμα!')
     tk.Button(app,text='Διαγραφή',command=remove_customer_sbt).pack()
+    tk.Button(app,text='Πίσω στην αρχική ->>',command=home).pack()
        
 def find_products():
     clear_app()
+    app.title('CRM Lite - Δημιουργία Χρήστη')
     tk.Label(app,text='Δώσε SKU\n').pack()
     sku_e = Entry(app)
     sku_e.pack()
@@ -95,9 +100,11 @@ def find_products():
         tk.Label(app,textvariable=var).pack()
 
     tk.Button(app,text='Αναζήτηση',command=search_product_sbt).pack()
+    tk.Button(app,text='Πίσω στην αρχική ->>',command=home).pack()
 
 def new_product():
     clear_app()
+    app.title('CRM Lite - Δημιουργία Χρήστη')
     tk.Label(app,text='Δώσε Τίτλο προϊόντος \n').pack()
     title_e = Entry(app)
     title_e.pack()
@@ -119,9 +126,11 @@ def new_product():
             exist_product = product
             tk.Label(app,text='Ο κωδικός ανήκει στο: {} '.format(exist_product)).pack()
     tk.Button(app,text='Προσθήκη',command=new_product_sbt).pack()
+    tk.Button(app,text='Πίσω στην αρχική ->>',command=home).pack()
 
 def remove_product():
     clear_app()
+    app.title('CRM Lite - Δημιουργία Χρήστη')
     tk.Label(app,text='Δώσε SKU').pack()
     sku_e = Entry(app)
     sku_e.pack()
@@ -134,9 +143,11 @@ def remove_product():
         else:
             tk.Label(app,text='Δεν υπάρχει προϊόν με αυτόν τον κωδικό').pack()
     tk.Button(app,text='Διαγραφή',command=remove_product_sbt).pack()
+    tk.Button(app,text='Πίσω στην αρχική ->>',command=home).pack()
 
 def new_user():
     clear_app()
+    app.title('CRM Lite - Δημιουργία Χρήστη')
     tk.Label(app,text='Δώσε username \n').pack()
     user_e = Entry(app)
     user_e.pack()
@@ -153,9 +164,11 @@ def new_user():
             var = tk.StringVar(value=creation_user)
             tk.Label(app,textvariable=var).pack()
     tk.Button(app,text='Προσθήκη',command=new_user_sbt).pack()
+    tk.Button(app,text='Πίσω στην αρχική ->>',command=home).pack()
 
 def remove_user():
     clear_app()
+    app.title('CRM Lite - Διαγραφή χρήστη')
     tk.Label(app,text='Δώσε username\n').pack()
     user_e = Entry(app)
     user_e.pack()
@@ -169,10 +182,12 @@ def remove_user():
         var = tk.StringVar(value=final)
         tk.Label(app,textvariable=var).pack()
     tk.Button(app,text='Διαγραφή',command=remove_user_sbt).pack()
+    tk.Button(app,text='Πίσω στην αρχική ->>',command=home).pack()
 
 
 def home():
     clear_app()
+    app.title('CRM Lite')
     tk.Label(app,text='Καλωσορίσατε {} ! \n Επιλέξτε ενέργεια'.format(user)).pack()
     tk.Button(app,text='Προσθήκη Πελάτη ',command=new_customer).pack()
     tk.Button(app,text='Διαγραφή πελάτη',command=remove_customer).pack()
