@@ -135,6 +135,27 @@ def remove_product():
             tk.Label(app,text='Δεν υπάρχει προϊόν με αυτόν τον κωδικό').pack()
     tk.Button(app,text='Διαγραφή',command=remove_product_sbt).pack()
 
+def new_user():
+    clear_app()
+    tk.Label(app,text='Δώσε username \n').pack()
+    user_e = Entry(app)
+    user_e.pack()
+    tk.Label(app,text='Δώσε κωδικό \n').pack()
+    passw_e = Entry(app,show='*')
+    passw_e.pack()
+    def new_user_sbt():
+        user = user_e.get()
+        passw = passw_e.get()
+        if check_username(user) == True:
+            tk.Label(app,text='Υπάρχει χρήστης με αυτό το όνομα \n').pack()
+        else:
+            creation_user = create_user(user,passw)
+            var = tk.StringVar(value=creation_user)
+            tk.Label(app,textvariable=var).pack()
+    tk.Button(app,text='Προσθήκη',command=new_user_sbt).pack()
+
+
+
 def home():
     clear_app()
     tk.Label(app,text='Καλωσορίσατε {} ! \n Επιλέξτε ενέργεια'.format(user)).pack()
@@ -143,8 +164,7 @@ def home():
     tk.Button(app,text='Αναζήτηση προϊόντος',command=find_products).pack()
     tk.Button(app,text='Προσθήκη προϊόντος',command=new_product).pack()
     tk.Button(app,text='Διαγραφή Προϊόντος',command=remove_product).pack()
-
-
+    tk.Button(app,text='Προσθήκη χρήστη εφαρμογής',command=new_user).pack()
 
 
 tk.Button(app,text='Σύνδεθείτε', command=login).pack()

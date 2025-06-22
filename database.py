@@ -26,6 +26,17 @@ def check_logins(user,password):
         return False #Wrong Credentials
     
 
+def check_username(username):
+    conn = sql.connect('database.db')
+    cursor = conn.cursor()
+    cursor.execute(
+        "SELECT * FROM users WHERE username = ?",(username,)
+    )
+    res_exist = cursor.fetchone()
+    if res_exist:
+        return True #USERNAME IS IN DB
+    else:
+        return False #USERNAME NOT IN DB
 
 
 
@@ -65,7 +76,20 @@ def email_check(email):
     else:
         return False
 
-
+def create_user(username,password):
+    password_encrypted = hashlib.sha256(password.encode()).hexdigest()
+    conn = sql.connect('database.db')
+    cursor = conn.cursor()
+    cursor.execute(
+        "INSERT INTO users (username,passw) VALUES (? , ?)",(username,password_encrypted,)
+    )
+    conn.commit()
+    conn.close()
+    creation_result = check_username(username)
+    if creation_result == True:
+        return 'Ο χρήστης προστέθηκε επιτυχώς! \n'
+    else:
+        return 'Προέκυψε σφάλμα! Δοκιμάστε ξανά! '
 
 def getEmail(phone):
     conn = sql.connect('database.db')
@@ -93,6 +117,7 @@ def search_product(sku):
         product = 'Product not found!'
         return product
     
+
 
 def create_product(sku,title,price):
     conn = sql.connect('database.db')
