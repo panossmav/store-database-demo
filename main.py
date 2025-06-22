@@ -154,6 +154,21 @@ def new_user():
             tk.Label(app,textvariable=var).pack()
     tk.Button(app,text='Προσθήκη',command=new_user_sbt).pack()
 
+def remove_user():
+    clear_app()
+    tk.Label(app,text='Δώσε username\n').pack()
+    user_e = Entry(app)
+    user_e.pack()
+    tk.Label(app,text='Δώσε password \n').pack()
+    passw_e = Entry(app,show='*')
+    passw_e.pack()
+    def remove_user_sbt():
+        user = user_e.get()
+        passw = passw_e.get()
+        final = delete_user(user,passw)
+        var = tk.StringVar(value=final)
+        tk.Label(app,textvariable=var).pack()
+    tk.Button(app,text='Διαγραφή',command=remove_user_sbt).pack()
 
 
 def home():
@@ -165,7 +180,7 @@ def home():
     tk.Button(app,text='Προσθήκη προϊόντος',command=new_product).pack()
     tk.Button(app,text='Διαγραφή Προϊόντος',command=remove_product).pack()
     tk.Button(app,text='Προσθήκη χρήστη εφαρμογής',command=new_user).pack()
-
+    tk.Button(app,text='Διαγραφή χρήστη εφαρμογής',command=remove_user).pack()
 
 tk.Button(app,text='Σύνδεθείτε', command=login).pack()
 

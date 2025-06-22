@@ -117,7 +117,24 @@ def search_product(sku):
         product = 'Product not found!'
         return product
     
-
+def delete_user(username,password):
+    result = check_logins(username,password)
+    if result == True:
+        conn = sql.connect('database.db')
+        cursor = conn.cursor()
+        cursor.execute(
+            "DELETE FROM users WHERE username = ?",(username,)
+        )
+        conn.commit()
+        final_res = check_username(username)
+        conn.close()
+        if final_res == False:
+            return 'Ο χρήστης διαγράφηκε επιτυχώς'
+        else:
+            return 'Σφάλμα κατά την διαγραφή. Δοκιμάστε ξανά'
+    else:
+        return 'Ο συνδιασμός Username και Password είναι λάθος!'
+        
 
 def create_product(sku,title,price):
     conn = sql.connect('database.db')
