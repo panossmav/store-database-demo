@@ -248,5 +248,29 @@ def edit_order_status(order,status):
         conn.commit()
         return 'Έγινε αλλαγή κατάστασης σε %s'%status
 
+def search_client(vat):
+    conn = sql.connect(resource_path('database.db'))
+    cursor = conn.cursor()
+    cursor.execute(
+        "SELECT * FROM customers WHERE vat = ?",(vat,)
+    )
+    result = cursor.fetchone()
+    if result:
+        return result
+    else:
+        return 'Ο πελάτης με ΑΦΜ %s δεν βρέθηκε'%vat
+    
+def view_client_orders(vat):
+    conn = sql.connect(resource_path('database.db'))
+    cursor = conn.cursor()
+    cursor.execute(
+        "SELECT * FROM orders WHERE customer_vat = ?",(vat,)
+    )
+    res = cursor.fetchall()
+    if res:
+        return res
+    else:
+        return 'Ο πελάτης δεν έχει κάνει καμία παραγγελία!'
+
 conn.close()
     

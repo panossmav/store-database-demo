@@ -236,12 +236,32 @@ def modify_order_status():
     tk.Button(app,text='Αλλαγή',command=modify_order_status_sbt).pack()
     tk.Button(app,text='Πίσω στην αρχική ->>',command=home).pack()
 
+def find_client():
+    clear_app()
+    tk.Label(app,text='Δώσε ΑΦΜ πελάτη').pack()
+    vat_e = Entry(app)
+    vat_e.pack()
+    def find_client_sbt():
+        vat = int(vat_e.get())
+        res1 = search_client(vat)
+        var1 = tk.StringVar(value=res1)
+        tk.Label(app,textvariable=var1).pack()
+        if res1 != 'Ο πελάτης με ΑΦΜ %s δεν βρέθηκε'%vat:
+            res2 = view_client_orders(vat)
+            var2 = tk.StringVar(value=res2)
+            tk.Label(app,textvariable=var2).pack()
+    tk.Button(app,text='Αναζήτηση',command=find_client_sbt).pack()
+    tk.Button(app,text='Πίσω στην αρχική ->>',command=home).pack()
+
+
+
 
 def home():
     clear_app()
     app.title('CRM Lite')
     tk.Label(app,text='Καλωσορίσατε {} ! \n Επιλέξτε ενέργεια'.format(user)).pack()
     tk.Button(app,text='Προσθήκη Πελάτη ',command=new_customer).pack()
+    tk.Button(app,text='Αναζήτηση πελάτη',command=find_client).pack()
     tk.Button(app,text='Διαγραφή πελάτη',command=remove_customer).pack()
     tk.Button(app,text='Νέα παραγγελία',command=new_order).pack()
     tk.Button(app,text='Αναζήτηση παραγγελίας',command=search_order).pack()
