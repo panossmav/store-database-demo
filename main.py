@@ -29,6 +29,27 @@ def login():
     else:
         tk.Label(app,text='Wrong Credentials! \n').pack()
 
+def new_order():
+    clear_app()
+    app.title('Νέα Παραγγελία - CRMLite')
+    tk.Label(app,text='Δώσε κωδικό προϊόντος:\n').pack()
+    sku_e = Entry(app)
+    sku_e.pack()
+    tk.Label(app,text='Δώσε ΑΦΜ πελάτη: ').pack()
+    vat_e = Entry(app)
+    vat_e.pack()
+    def new_order_sbt():
+        sku = sku_e.get()
+        vat = int(vat_e.get())
+        if check_vat(vat) == True and check_sku_order(sku) == True:
+            create_order(sku,vat)
+            result = 'Καταχωρήθηκε επιτυχώς!'
+        else:
+            result = 'Σφάλμα εισόδου'
+        final_var = tk.StringVar(value=result)
+        tk.Label(app,textvariable=final_var).pack()
+    tk.Button(app,text='Δημιουργία παραγγελίας',command=new_order_sbt).pack()
+    tk.Button(app,text='Πίσω στην αρχική ->>',command=home).pack()
 
 
 def new_customer():
@@ -191,6 +212,7 @@ def home():
     tk.Label(app,text='Καλωσορίσατε {} ! \n Επιλέξτε ενέργεια'.format(user)).pack()
     tk.Button(app,text='Προσθήκη Πελάτη ',command=new_customer).pack()
     tk.Button(app,text='Διαγραφή πελάτη',command=remove_customer).pack()
+    tk.Button(app,text='Νέα παραγγελία',command=new_order).pack()
     tk.Button(app,text='Αναζήτηση προϊόντος',command=find_products).pack()
     tk.Button(app,text='Προσθήκη προϊόντος',command=new_product).pack()
     tk.Button(app,text='Διαγραφή Προϊόντος',command=remove_product).pack()

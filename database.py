@@ -187,5 +187,41 @@ def phone_check(phone):
     conn.close()
     return result
 
+
+
+def create_order(sku,vat):
+    conn = sql.connect(resource_path('database.db'))
+    cursor = conn.cursor()
+    cursor.execute(
+        "INSERT INTO orders (prod_sku,customer_vat) VALUES(?, ?)",(sku,vat)
+    )
+    conn.commit()
+
+def check_vat(vat):
+    conn = sql.connect(resource_path('database.db'))
+    cursor=conn.cursor()
+    cursor.execute(
+        "SELECT * FROM customers WHERE vat = ?",(vat,)
+    )
+    search_res = cursor.fetchone()
+    conn.close()
+    if search_res:
+        return True #Υπάρχει πελάτης
+    else:
+        return False #Δεν υπάρχει πελάτης
+
+def check_sku_order(sku):
+    conn = sql.connect(resource_path('database.db'))
+    cursor = conn.cursor()
+    cursor.execute(
+        "SELECT * FROM products WHERE sku = ?",(sku,)
+    )
+    sku_res = cursor.fetchone()
+    conn.close()
+    if sku_res:
+        return True #Υπάρχει προϊόν
+    else:
+        return False #Δεν υπάρχει προϊόν
+
 conn.close()
     
