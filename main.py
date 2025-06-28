@@ -52,6 +52,20 @@ def new_order():
     tk.Button(app,text='Πίσω στην αρχική ->>',command=home).pack()
 
 
+def search_order():
+    clear_app()
+    app.title('Αναζήτηση παραγγελίας | CRMLite')
+    tk.Label(app,text='Δώσε Αρ. Παραγγελίας: \n').pack()
+    order_no_e = Entry(app)
+    order_no_e.pack()
+    def search_order_sbt():
+        order_no = int(order_no_e.get())
+        final_res = find_order(order_no)
+        res_var = tk.StringVar(value=final_res)
+        tk.Label(app,textvariable=res_var).pack()
+    tk.Button(app,text='Αναζήτση παραγγελίας',command=search_order_sbt).pack()
+    tk.Button(app,text='Πίσω στην αρχική ->>',command=home).pack()
+
 def new_customer():
     clear_app()
     app.title('CRM Lite - Δημιουργία Χρήστη')
@@ -213,6 +227,7 @@ def home():
     tk.Button(app,text='Προσθήκη Πελάτη ',command=new_customer).pack()
     tk.Button(app,text='Διαγραφή πελάτη',command=remove_customer).pack()
     tk.Button(app,text='Νέα παραγγελία',command=new_order).pack()
+    tk.Button(app,text='Αναζήτηση παραγγελίας',command=search_order).pack()
     tk.Button(app,text='Αναζήτηση προϊόντος',command=find_products).pack()
     tk.Button(app,text='Προσθήκη προϊόντος',command=new_product).pack()
     tk.Button(app,text='Διαγραφή Προϊόντος',command=remove_product).pack()

@@ -187,7 +187,17 @@ def phone_check(phone):
     conn.close()
     return result
 
-
+def find_order(order_no):
+    conn = sql.connect(resource_path('database.db'))
+    cursor = conn.cursor()
+    cursor.execute(
+        "SELECT * FROM orders WHERE order_no = ?",(order_no,)
+    )
+    result = cursor.fetchone()
+    if result:
+        return result
+    else:
+        return 'Δεν βρέθηκε παραγγελία!'
 
 def create_order(sku,vat):
     conn = sql.connect(resource_path('database.db'))
