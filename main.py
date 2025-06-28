@@ -29,7 +29,42 @@ def login():
     else:
         tk.Label(app,text='Wrong Credentials! \n').pack()
 
+def new_order():
+    clear_app()
+    app.title('Νέα Παραγγελία - CRMLite')
+    tk.Label(app,text='Δώσε κωδικό προϊόντος:\n').pack()
+    sku_e = Entry(app)
+    sku_e.pack()
+    tk.Label(app,text='Δώσε ΑΦΜ πελάτη: ').pack()
+    vat_e = Entry(app)
+    vat_e.pack()
+    def new_order_sbt():
+        sku = sku_e.get()
+        vat = int(vat_e.get())
+        if check_vat(vat) == True and check_sku_order(sku) == True:
+            create_order(sku,vat)
+            result = 'Καταχωρήθηκε επιτυχώς!'
+        else:
+            result = 'Σφάλμα εισόδου'
+        final_var = tk.StringVar(value=result)
+        tk.Label(app,textvariable=final_var).pack()
+    tk.Button(app,text='Δημιουργία παραγγελίας',command=new_order_sbt).pack()
+    tk.Button(app,text='Πίσω στην αρχική ->>',command=home).pack()
 
+
+def search_order():
+    clear_app()
+    app.title('Αναζήτηση παραγγελίας | CRMLite')
+    tk.Label(app,text='Δώσε Αρ. Παραγγελίας: \n').pack()
+    order_no_e = Entry(app)
+    order_no_e.pack()
+    def search_order_sbt():
+        order_no = int(order_no_e.get())
+        final_res = find_order(order_no)
+        res_var = tk.StringVar(value=final_res)
+        tk.Label(app,textvariable=res_var).pack()
+    tk.Button(app,text='Αναζήτση παραγγελίας',command=search_order_sbt).pack()
+    tk.Button(app,text='Πίσω στην αρχική ->>',command=home).pack()
 
 def new_customer():
     clear_app()
@@ -184,13 +219,53 @@ def remove_user():
     tk.Button(app,text='Διαγραφή',command=remove_user_sbt).pack()
     tk.Button(app,text='Πίσω στην αρχική ->>',command=home).pack()
 
+def modify_order_status():
+    clear_app()
+    tk.Label(app,text='Δώσε αρ. παραγγελίας: ').pack()
+    order_no_e = Entry(app)
+    order_no_e.pack()
+    tk.Label(app,text='Δώσε αλλαγή στο Status ').pack()
+    status_e = Entry(app)
+    status_e.pack()
+    def modify_order_status_sbt():
+        order_num = int(order_no_e.get())
+        new_status = status_e.get()
+        res = edit_order_status(order_num,new_status)
+        res_var = tk.StringVar(value=res)
+        tk.Label(app,textvariable=res_var).pack()
+    tk.Button(app,text='Αλλαγή',command=modify_order_status_sbt).pack()
+    tk.Button(app,text='Πίσω στην αρχική ->>',command=home).pack()
+
+def find_client():
+    clear_app()
+    tk.Label(app,text='Δώσε ΑΦΜ πελάτη').pack()
+    vat_e = Entry(app)
+    vat_e.pack()
+    def find_client_sbt():
+        vat = int(vat_e.get())
+        res1 = search_client(vat)
+        var1 = tk.StringVar(value=res1)
+        tk.Label(app,textvariable=var1).pack()
+        if res1 != 'Ο πελάτης με ΑΦΜ %s δεν βρέθηκε'%vat:
+            res2 = view_client_orders(vat)
+            var2 = tk.StringVar(value=res2)
+            tk.Label(app,textvariable=var2).pack()
+    tk.Button(app,text='Αναζήτηση',command=find_client_sbt).pack()
+    tk.Button(app,text='Πίσω στην αρχική ->>',command=home).pack()
+
+
+
 
 def home():
     clear_app()
     app.title('CRM Lite')
     tk.Label(app,text='Καλωσορίσατε {} ! \n Επιλέξτε ενέργεια'.format(user)).pack()
     tk.Button(app,text='Προσθήκη Πελάτη ',command=new_customer).pack()
+    tk.Button(app,text='Αναζήτηση πελάτη',command=find_client).pack()
     tk.Button(app,text='Διαγραφή πελάτη',command=remove_customer).pack()
+    tk.Button(app,text='Νέα παραγγελία',command=new_order).pack()
+    tk.Button(app,text='Αναζήτηση παραγγελίας',command=search_order).pack()
+    tk.Button(app,text='Αλλαγή παραγγελίας',command=modify_order_status).pack()
     tk.Button(app,text='Αναζήτηση προϊόντος',command=find_products).pack()
     tk.Button(app,text='Προσθήκη προϊόντος',command=new_product).pack()
     tk.Button(app,text='Διαγραφή Προϊόντος',command=remove_product).pack()

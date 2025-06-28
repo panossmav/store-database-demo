@@ -1,14 +1,18 @@
 import sqlite3 as sql
 import hashlib
-import sys, os
+import sys
+import os
 
 def resource_path(relative_path):
+    """Λήψη σωστού path για PyInstaller ή κανονικό run"""
     try:
-        base_path = sys._MEIPASS  # όταν είναι .exe
+        base_path = sys._MEIPASS  # όταν είναι πακεταρισμένο σε .exe
     except AttributeError:
-        base_path = os.path.abspath(".")  # όταν τρέχεις από .py
+        base_path = os.path.abspath(".")  # όταν τρέχεις ως .py
 
     return os.path.join(base_path, relative_path)
+
+
 
 conn = sql.connect(resource_path('database.db'))
 
@@ -145,6 +149,7 @@ def delete_user(username,password):
         return 'Ο συνδιασμός Username και Password είναι λάθος!'
         
 
+
 def create_product(sku,title,price):
     conn = sql.connect(resource_path('database.db'))
     cursor = conn.cursor()
@@ -183,5 +188,88 @@ def phone_check(phone):
     conn.close()
     return result
 
-conn.close()
+def find_order(order_no):
+    conn = sql.connect(resource_path('database.db'))
+    cursor = conn.cursor()
+    cursor.execute(
+        "SELECT * FROM orders WHERE order_no = ?",(order_no,)
+    )
+    result = cursor.fetchone()
+    if result:
+        return result
+    else:
+        return 'Δεν βρέθηκε παραγγελία!'
+
+def create_order(sku,vat):
+    conn = sql.connect(resource_path('database.db'))
+    cursor = conn.cursor()
+    cursor.execute(
+        "INSERT INTO orders (prod_sku,customer_vat) VALUES(?, ?)",(sku,vat)
+    )
+    conn.commit()
+
+def check_vat(vat):
+    conn = sql.connect(resource_path('database.db'))
+    cursor=conn.cursor()
+    cursor.execute(
+        "SELECT * FROM customers WHERE vat = ?",(vat,)
+    )
+    search_res = cursor.fetchone()
+    conn.close()
+    if search_res:
+        return True #Υπάρχει πελάτης
+    else:
+        return False #Δεν υπάρχει πελάτης
+
+def check_sku_order(sku):
+    conn = sql.connect(resource_path('database.db'))
+    cursor = conn.cursor()
+    cursor.execute(
+        "SELECT * FROM products WHERE sku = ?",(sku,)
+    )
+    sku_res = cursor.fetchone()
+    conn.close()
+    if sku_res:
+        return True #Υπάρχει προϊόν
+    else:
+        return False #Δεν υπάρχει προϊόν
+
+
+def edit_order_status(order,status):
+    order_check = find_order(order)
+    if order_check == 'Δεν βρέθηκε παραγγελία!':
+        return order_check
+    else:
+        conn = sql.connect(resource_path('database.db'))
+        cursor = conn.cursor()
+        cursor.execute(
+            "UPDATE orders SET order_status = ? WHERE order_no = ?",(status,order)
+        )
+        conn.commit()
+        return 'Έγινε αλλαγή κατάστασης σε %s'%status
+
+def search_client(vat):
+    conn = sql.connect(resource_path('database.db'))
+    cursor = conn.cursor()
+    cursor.execute(
+        "SELECT * FROM customers WHERE vat = ?",(vat,)
+    )
+    result = cursor.fetchone()
+    if result:
+        return result
+    else:
+        return 'Ο πελάτης με ΑΦΜ %s δεν βρέθηκε'%vat
     
+def view_client_orders(vat):
+    conn = sql.connect(resource_path('database.db'))
+    cursor = conn.cursor()
+    cursor.execute(
+        "SELECT * FROM orders WHERE customer_vat = ?",(vat,)
+    )
+    res = cursor.fetchall()
+    if res:
+        return res
+    else:
+        return 'Ο πελάτης δεν έχει κάνει καμία παραγγελία!'
+
+conn.close()
