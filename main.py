@@ -219,6 +219,23 @@ def remove_user():
     tk.Button(app,text='Διαγραφή',command=remove_user_sbt).pack()
     tk.Button(app,text='Πίσω στην αρχική ->>',command=home).pack()
 
+def modify_order_status():
+    clear_app()
+    tk.Label(app,text='Δώσε αρ. παραγγελίας: ').pack()
+    order_no_e = Entry(app)
+    order_no_e.pack()
+    tk.Label(app,text='Δώσε αλλαγή στο Status ').pack()
+    status_e = Entry(app)
+    status_e.pack()
+    def modify_order_status_sbt():
+        order_num = int(order_no_e.get())
+        new_status = status_e.get()
+        res = edit_order_status(order_num,new_status)
+        res_var = tk.StringVar(value=res)
+        tk.Label(app,textvariable=res_var).pack()
+    tk.Button(app,text='Αλλαγή',command=modify_order_status_sbt).pack()
+    tk.Button(app,text='Πίσω στην αρχική ->>',command=home).pack()
+
 
 def home():
     clear_app()
@@ -228,6 +245,7 @@ def home():
     tk.Button(app,text='Διαγραφή πελάτη',command=remove_customer).pack()
     tk.Button(app,text='Νέα παραγγελία',command=new_order).pack()
     tk.Button(app,text='Αναζήτηση παραγγελίας',command=search_order).pack()
+    tk.Button(app,text='Αλλαγή παραγγελίας',command=modify_order_status).pack()
     tk.Button(app,text='Αναζήτηση προϊόντος',command=find_products).pack()
     tk.Button(app,text='Προσθήκη προϊόντος',command=new_product).pack()
     tk.Button(app,text='Διαγραφή Προϊόντος',command=remove_product).pack()

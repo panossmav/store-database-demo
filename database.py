@@ -149,6 +149,7 @@ def delete_user(username,password):
         return 'Ο συνδιασμός Username και Password είναι λάθος!'
         
 
+
 def create_product(sku,title,price):
     conn = sql.connect(resource_path('database.db'))
     cursor = conn.cursor()
@@ -232,6 +233,20 @@ def check_sku_order(sku):
         return True #Υπάρχει προϊόν
     else:
         return False #Δεν υπάρχει προϊόν
+
+
+def edit_order_status(order,status):
+    order_check = find_order(order)
+    if order_check == 'Δεν βρέθηκε παραγγελία!':
+        return order_check
+    else:
+        conn = sql.connect(resource_path('database.db'))
+        cursor = conn.cursor()
+        cursor.execute(
+            "UPDATE orders SET order_status = ? WHERE order_no = ?",(status,order)
+        )
+        conn.commit()
+        return 'Έγινε αλλαγή κατάστασης σε %s'%status
 
 conn.close()
     
