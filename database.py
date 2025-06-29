@@ -272,5 +272,27 @@ def view_client_orders(vat):
     else:
         return 'Ο πελάτης δεν έχει κάνει καμία παραγγελία!'
 
-conn.close()
-    
+def see_all_orders():
+    conn = sql.connect('database.db')
+    cursor = conn.cursor()
+    cursor.execute(
+        "SELECT * FROM orders"
+    )
+    res = cursor.fetchone()
+    if res:
+        return res
+    else:
+        return 'Δεν έχουν γίνει παραγγελίες'
+
+
+def format_db():
+    conn = sql.connect('database.db')
+    cursor = conn.cursor()
+    cursor.execute("DELETE FROM customers")
+    cursor.execute("DELETE FROM orders")
+    cursor.execute("DELETE FROM products")
+    conn.commit()
+    conn.close()
+
+
+def

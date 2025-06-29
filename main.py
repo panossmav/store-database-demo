@@ -254,6 +254,13 @@ def find_client():
     tk.Button(app,text='Πίσω στην αρχική ->>',command=home).pack()
 
 
+def view_all_orders():
+    clear_app()
+    orders = see_all_orders()
+    var = tk.StringVar(value=orders)
+    tk.Label(app,textvariable=var).pack()
+    tk.Button(app,text='Πίσω στην αρχική ->>',command=home).pack()
+
 
 
 def home():
@@ -264,6 +271,7 @@ def home():
     tk.Button(app,text='Αναζήτηση πελάτη',command=find_client).pack()
     tk.Button(app,text='Διαγραφή πελάτη',command=remove_customer).pack()
     tk.Button(app,text='Νέα παραγγελία',command=new_order).pack()
+    tk.Button(app,text='Προβολή όλων των παραγγελιών',command=view_all_orders).pack()
     tk.Button(app,text='Αναζήτηση παραγγελίας',command=search_order).pack()
     tk.Button(app,text='Αλλαγή παραγγελίας',command=modify_order_status).pack()
     tk.Button(app,text='Αναζήτηση προϊόντος',command=find_products).pack()
@@ -271,6 +279,7 @@ def home():
     tk.Button(app,text='Διαγραφή Προϊόντος',command=remove_product).pack()
     tk.Button(app,text='Προσθήκη χρήστη εφαρμογής',command=new_user).pack()
     tk.Button(app,text='Διαγραφή χρήστη εφαρμογής',command=remove_user).pack()
+
 
 tk.Button(app,text='Σύνδεθείτε', command=login).pack()
 
