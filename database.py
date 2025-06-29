@@ -52,6 +52,14 @@ def check_username(username):
         return False #USERNAME NOT IN DB
 
 
+def save_logs(user,action):
+    conn = sql.connect(resource_path('database.db'))
+    cursor = conn.cursor()
+    cursor.execute(
+        "INSERT INTO user_logs (user,user_action) VALUES (?,?)",(user,action)
+    )
+    conn.commit()
+    conn.close()
 
 def add_customer(f_name,l_name,email,phone,vat):
     conn = sql.connect(resource_path('database.db'))
@@ -278,7 +286,7 @@ def see_all_orders():
     cursor.execute(
         "SELECT * FROM orders"
     )
-    res = cursor.fetchone()
+    res = cursor.fetchall()
     if res:
         return res
     else:
@@ -286,7 +294,7 @@ def see_all_orders():
 
 
 def format_db():
-    conn = sql.connect('database.db')
+    conn = sql.connect(resource_path('database.db'))
     cursor = conn.cursor()
     cursor.execute("DELETE FROM customers")
     cursor.execute("DELETE FROM orders")
@@ -294,5 +302,17 @@ def format_db():
     conn.commit()
     conn.close()
 
+def view_user_logs():
+    conn = sql.connect(resource_path('database.db'))
+    cursor = conn.cursor()
+    cursor.execute(
+        "SELECT * FROM user_logs"
+    )
+    logs = cursor.fetchall()
+    if logs:
+        return logs
+    else:
+        return 'Δεν βρέθηκαν logs'
+    conn.close()
 
-def
+conn.close()

@@ -44,6 +44,7 @@ def new_order():
         if check_vat(vat) == True and check_sku_order(sku) == True:
             create_order(sku,vat)
             result = 'Καταχωρήθηκε επιτυχώς!'
+            save_logs(user,'Καταχώρηση παραγγελίας: %s'%sku)
         else:
             result = 'Σφάλμα εισόδου'
         final_var = tk.StringVar(value=result)
@@ -98,6 +99,7 @@ def new_customer():
                 tk.Label(app,text='Το email χρησιμποιείται ήδη! Δοκιμάστε ξανά \n').pack()
             else:
                 add_customer(f_name,l_name,email,phone,vat)
+                save_logs(user,'Καταχώρηση πελάτη με ΑΦΜ: %d'%vat)
                 tk.Label(app,text='Ο πελάτης αποθηκεύτηκε! ').pack()
     tk.Button(app,text='Προσθήκη',command=new_customer_sbt).pack()
     tk.Button(app,text='Πίσω στην αρχική ->>',command=home).pack()
@@ -116,6 +118,7 @@ def remove_customer():
         phone = int(phone_e.get())
         result = delete_customer(phone,email)
         if result == True:
+            save_logs(user,'Διαγραφή πελάτη με αρ. τηλ: %d'%phone)
             tk.Label(app,text='Ο πελάτης διαγράφηκε!').pack()
         else:
             tk.Label(app,text='Σφάλμα!')
@@ -157,6 +160,7 @@ def new_product():
         if not product: #No other product with this SKU
             create_product(sku,title,price)
             tk.Label(app,text='Το προϊόν {} προστέθηκε'.format(title)).pack()
+            save_logs(user,'Δημιουργία προϊόντος %d'%sku)
         else:
             exist_product = product
             tk.Label(app,text='Ο κωδικός ανήκει στο: {} '.format(exist_product)).pack()
@@ -165,7 +169,7 @@ def new_product():
 
 def remove_product():
     clear_app()
-    app.title('CRM Lite - Δημιουργία Χρήστη')
+    app.title('CRM Lite - Διαγραφη Προϊόντος')
     tk.Label(app,text='Δώσε SKU').pack()
     sku_e = Entry(app)
     sku_e.pack()
@@ -175,12 +179,14 @@ def remove_product():
         if result:
             delete_product(sku)
             tk.Label(app,text='Διαγράφηκε επιτυχώς!').pack()
+            save_logs(user,'Διαγραφή προϊόντος %d'%sku)
         else:
             tk.Label(app,text='Δεν υπάρχει προϊόν με αυτόν τον κωδικό').pack()
     tk.Button(app,text='Διαγραφή',command=remove_product_sbt).pack()
     tk.Button(app,text='Πίσω στην αρχική ->>',command=home).pack()
 
 def new_user():
+    logged_user = user
     clear_app()
     app.title('CRM Lite - Δημιουργία Χρήστη')
     tk.Label(app,text='Δώσε username \n').pack()
@@ -198,10 +204,12 @@ def new_user():
             creation_user = create_user(user,passw)
             var = tk.StringVar(value=creation_user)
             tk.Label(app,textvariable=var).pack()
+            save_logs(logged_user,'Προσθήκη χρήστη %s'%user)
     tk.Button(app,text='Προσθήκη',command=new_user_sbt).pack()
     tk.Button(app,text='Πίσω στην αρχική ->>',command=home).pack()
 
 def remove_user():
+    logged_user = user
     clear_app()
     app.title('CRM Lite - Διαγραφή χρήστη')
     tk.Label(app,text='Δώσε username\n').pack()
@@ -216,6 +224,7 @@ def remove_user():
         final = delete_user(user,passw)
         var = tk.StringVar(value=final)
         tk.Label(app,textvariable=var).pack()
+        save_logs(logged_user,'Διαγραφή χρήστη %s'%user)
     tk.Button(app,text='Διαγραφή',command=remove_user_sbt).pack()
     tk.Button(app,text='Πίσω στην αρχική ->>',command=home).pack()
 
@@ -233,6 +242,7 @@ def modify_order_status():
         res = edit_order_status(order_num,new_status)
         res_var = tk.StringVar(value=res)
         tk.Label(app,textvariable=res_var).pack()
+        save_logs(user,'Αλλαγη παραγγελίας %d'%order_num)
     tk.Button(app,text='Αλλαγή',command=modify_order_status_sbt).pack()
     tk.Button(app,text='Πίσω στην αρχική ->>',command=home).pack()
 
@@ -261,7 +271,23 @@ def view_all_orders():
     tk.Label(app,textvariable=var).pack()
     tk.Button(app,text='Πίσω στην αρχική ->>',command=home).pack()
 
+def reset_db():
+    clear_app()
+    tk.Label(app,text='ΠΡΟΣΟΧΗ! ΑΥΤΗ Η ΕΝΕΡΓΕΙΑ ΘΑ ΔΙΑΓΡΑΨΕΙ ΟΛΟΥΣ ΤΟΥΣ ΠΕΛΑΤΕΣ, ΠΑΡΑΓΓΕΛΙΕΣ ΚΑΙ ΠΡΟΪΟΝΤΑ. \n').pack()
+    def reset_db_sbt():
+        format_db()
+        tk.Label(app,text='Διαγράφηκε!').pack()
+        save_logs(user,'Διαγραφή ολόκληρης βάσης!')
+    tk.Button(app,text='Διαγραφή').pack()
+    tk.Button(app,text='Πίσω στην αρχική ->>',command=home).pack()
 
+def check_user_logs():
+    clear_app()
+    app.title('User Logs - CRM Lite')
+    res = view_user_logs()
+    var = tk.StringVar(value=res)
+    tk.Label(app,textvariable=var).pack()
+    tk.Button(app,text='Πίσω στην αρχική ->>',command=home).pack()
 
 def home():
     clear_app()
@@ -279,6 +305,9 @@ def home():
     tk.Button(app,text='Διαγραφή Προϊόντος',command=remove_product).pack()
     tk.Button(app,text='Προσθήκη χρήστη εφαρμογής',command=new_user).pack()
     tk.Button(app,text='Διαγραφή χρήστη εφαρμογής',command=remove_user).pack()
+    tk.Button(app,text='Προβολή user logs',command=check_user_logs).pack()
+    tk.Label(app,text='DANGER ZONE \n').pack()
+    tk.Button(app,text='Διαγραφή βάσης',command=reset_db).pack()
 
 
 tk.Button(app,text='Σύνδεθείτε', command=login).pack()

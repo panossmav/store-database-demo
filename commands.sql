@@ -27,3 +27,9 @@ CREATE TABLE IF NOT EXISTS orders (
     customer_vat TEXT NOT NULL,
     order_status TEXT DEFAULT 'Fullfilled'
 );
+
+CREATE TABLE IF NOT EXISTS user_logs (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user TEXT NOT NULL,
+    user_action NOT NULL
+);
