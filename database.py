@@ -2,6 +2,7 @@ import sqlite3 as sql
 import hashlib
 import sys
 import os
+import csv
 
 def resource_path(relative_path):
     """Λήψη σωστού path για PyInstaller ή κανονικό run"""
@@ -314,5 +315,31 @@ def view_user_logs():
     else:
         return 'Δεν βρέθηκαν logs'
     conn.close()
+
+def export_user_logs_to_csv(filepath):
+    conn = sql.connect(resource_path('database.db'))
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM user_logs")
+    logs = cursor.fetchall()
+    headers = [description[0] for description in cursor.description]
+    with open(filepath, 'w', newline='', encoding='utf-8') as csvfile:
+        writer = csv.writer(csvfile)
+        writer.writerow(headers)
+        writer.writerows(logs)
+    conn.close()
+    return f'Logs exported to {filepath}'
+
+def export_orders_to_csv(filepath):
+    conn = sql.connect(resource_path('database.db'))
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM orders")
+    orders = cursor.fetchall()
+    headers = [description[0] for description in cursor.description]
+    with open(filepath, 'w', newline='', encoding='utf-8') as csvfile:
+        writer = csv.writer(csvfile)
+        writer.writerow(headers)
+        writer.writerows(orders)
+    conn.close()
+    return f'Orders exported to {filepath}'
 
 conn.close()

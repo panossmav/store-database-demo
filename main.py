@@ -1,5 +1,6 @@
 from tkinter import *
 import tkinter as tk
+from tkinter import filedialog
 from database import *
 def clear_app():
     for widgets in app.winfo_children():
@@ -93,7 +94,7 @@ def new_customer():
         phone = int(phone_e.get())
         vat = int(vat_e.get())
         if '@' not in email:
-            tk.Label(app,text='Σφάλμα! Ελέγξτε τα στοιχεία σας και δοκιμαστε ξανα').pack()
+            tk.Label(app,text='Σφάλμα! Ελέγξτε τα στοιχεία σας και δοκιμάστε ξανά').pack()
         else:
             if email_check(email) == True:
                 tk.Label(app,text='Το email χρησιμποιείται ήδη! Δοκιμάστε ξανά \n').pack()
@@ -264,29 +265,31 @@ def find_client():
     tk.Button(app,text='Πίσω στην αρχική ->>',command=home).pack()
 
 
-def view_all_orders():
-    clear_app()
-    orders = see_all_orders()
-    var = tk.StringVar(value=orders)
-    tk.Label(app,textvariable=var).pack()
-    tk.Button(app,text='Πίσω στην αρχική ->>',command=home).pack()
-
-def reset_db():
-    clear_app()
-    tk.Label(app,text='ΠΡΟΣΟΧΗ! ΑΥΤΗ Η ΕΝΕΡΓΕΙΑ ΘΑ ΔΙΑΓΡΑΨΕΙ ΟΛΟΥΣ ΤΟΥΣ ΠΕΛΑΤΕΣ, ΠΑΡΑΓΓΕΛΙΕΣ ΚΑΙ ΠΡΟΪΟΝΤΑ. \n').pack()
-    def reset_db_sbt():
-        format_db()
-        tk.Label(app,text='Διαγράφηκε!').pack()
-        save_logs(user,'Διαγραφή ολόκληρης βάσης!')
-    tk.Button(app,text='Διαγραφή').pack()
-    tk.Button(app,text='Πίσω στην αρχική ->>',command=home).pack()
-
 def check_user_logs():
     clear_app()
     app.title('User Logs - CRM Lite')
     res = view_user_logs()
     var = tk.StringVar(value=res)
-    tk.Label(app,textvariable=var).pack()
+    tk.Label(app,text'Εξαγωγή').pack()
+    def export_as_csv():
+        filepath = filedialog.asksaveasfilename(defaultextension='.csv', filetypes=[('CSV files', '*.csv')], title='Επιλέξτε που θα αποθηκευτεί το αρχείο CSV')
+        if filepath:
+            export_user_logs_to_csv(filepath)
+            tk.Label(app, text=f'Εξαγωγή σε {filepath} ολοκληρώθηκε!').pack()
+    tk.Button(app,text='Εξαγωγή σε CSV',command=export_as_csv).pack()
+    tk.Button(app,text='Πίσω στην αρχική ->>',command=home).pack()
+
+def view_all_orders():
+    clear_app()
+    orders = see_all_orders()
+    var = tk.StringVar(value=orders)
+    tk.Label(app,text='Εξαγωγή:').pack()
+    def export_orders_csv():
+        filepath = filedialog.asksaveasfilename(defaultextension='.csv', filetypes=[('CSV files', '*.csv')], title='Επιλέξτε που θα αποθηκευτεί το αρχείο CSV')
+        if filepath:
+            export_orders_to_csv(filepath)
+            tk.Label(app, text=f'Εξαγωγή σε {filepath} ολοκληρώθηκε!').pack()
+    tk.Button(app,text='Εξαγωγή παραγγελιών σε CSV',command=export_orders_csv).pack()
     tk.Button(app,text='Πίσω στην αρχική ->>',command=home).pack()
 
 def home():
